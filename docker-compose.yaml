@@ -1,0 +1,21 @@
+version: '3.7'
+services:
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    ports:
+      - "16686:16686"
+      - "14268:14268"
+  book-server:
+    depends_on:
+      - jaeger
+    build:
+      context: server/
+    restart: always
+    expose:
+      - "8080"
+  book-client:
+    depends_on:
+      - book-server
+    build:
+      context: client/
+    restart: always
